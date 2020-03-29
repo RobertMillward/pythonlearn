@@ -5,7 +5,12 @@ TeamO0.py Team version "O" level "0" api definition:
 import ArchEdenZ0Plan   as aep
 import TeamZ0Plan       as tZ0
 import datetime
+import enum
 
+class TeamRpts(enum.Enum):
+    townLongLatCntryState = 1;
+    longLatTown = 2;
+    
 def rptOpenDate():
     gotIt = datetime.datetime.today();
     print("%02d" %gotIt.day, end='');
@@ -29,6 +34,19 @@ def rptHdrLongLatTown():
     print("   %s   "    %tZ0.hdrLlTlist[1], end='');
     rptOpenDate();
     return;
+
+def rptColHdr(teamEnum):
+    print("Column headers are coming");
+    return;
+
+def rptRptHdr(teamEnum):
+    if(teamEnum == TeamRpts.townLongLatCntryState):
+        rptHdrTownLongLatCntryState();
+    elif(teamEnum == TeamRpts.longLatTown):
+        rptHdrLongLatTown();
+    rptColHdr(teamEnum)
+    return;
+
 
 
 # 100% flexible report generator in two parts
@@ -55,20 +73,15 @@ def reportFields(fldLst):
     reportField(aep.Uci.uciEOL);
     return;
 
-def rptColHdr(fldNbr):
-    print("Column headers are coming");
-    return;
 
+def rptLine(teamEnum):
+    if(teamEnum == TeamRpts.townLongLatCntryState):
+        reportFields(tZ0.rptTllCSlist);
+    elif(teamEnum == TeamRpts.longLatTown):
+        reportFields(tZ0.rptLlTlist);
+    return
 
-def rptLineTownLongLatCntryState():
-    reportFields(tZ0.rptTllCSlist);
-    return;
-
-def rptLineLongLatTown():
-    reportFields(tZ0.rptLlTlist);
-    return;
-
-def rptFtrAll():
+def rptFooterAll():
     print("End of report");
     return;
 

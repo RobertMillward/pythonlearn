@@ -17,12 +17,12 @@ print("Start with Team thesarus data for one line pre loaded");
 # demonstrate that any report can be run from the appropriate data.
 # (imagine that this is Team data)
 # this is a report of longitude/latitude and town.
-tO0.rptHdrLongLatTown();
-tO0.rptLineLongLatTown();
-tO0.rptFtrAll();
+tO0.rptRptHdr(tO0.TeamRpts.longLatTown);
+tO0.rptLine(tO0.TeamRpts.longLatTown);
+tO0.rptFooterAll();
 # this is a report of town, longitude/latitude, country, and state.
-tO0.rptHdrTownLongLatCntryState();
-tO0.rptLineTownLongLatCntryState();
-tO0.rptFtrAll();
+tO0.rptRptHdr(tO0.TeamRpts.townLongLatCntryState);
+tO0.rptLine(tO0.TeamRpts.townLongLatCntryState);
+tO0.rptFooterAll();
 
 print("End");
