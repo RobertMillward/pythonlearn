@@ -13,7 +13,10 @@ import TeamO0           as tO0
 
 # Start program execution here
 print("Start with Team thesarus data for one line pre loaded");
- 
+
+# current problem row
+tZ0.teamThesarus.initThesarus(tZ0.teamThesarus);
+
 # demonstrate that any report can be run from the appropriate data.
 # (imagine that this is Team data)
 # this is a report of longitude/latitude and town.

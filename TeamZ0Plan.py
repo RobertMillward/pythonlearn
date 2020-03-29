@@ -6,17 +6,18 @@ import ArchEdenZ0Plan as aep
 
 category = "TEAM";
 
-# Data is loaded here from any source
-teamThesarusData = ["someKey", "Preston", "Idaho", "USA", "7522000000"];
-# A service can use this thesarus to see which fields go where by name
-# For example a csv file with column headers.
-teamThesarus = [["key", "id"], \
-                ["town", "city"], \
-                ["state", "province"], \
-                ["country", "nation"], \
-                ["longLat"]];
-# A service can use this thesarus to see which fields
 
+teamThesarus = [aep.thesarus(aep.Uci.rowId,         ["rowId"]   ),
+                aep.thesarus(aep.Uci.townName,      ["town", "city"]),
+                aep.thesarus(aep.Uci.stateName,     ["state", "province"]),
+                aep.thesarus(aep.Uci.countryName,   ["country", "nation"]),
+                aep.thesarus(aep.Uci.townLongLat,   ["longLat"] )];
+
+
+# Data is loaded here from any source (until we get the above working)
+teamThesarusData = ["someKey", "Preston", "Idaho", "USA", "7522000000"];
+
+# Full width report title and columns
 hdrTllCSlist = ["TllCS", "Full Team information"]; 
 
 rptTllCSlist = [aep.Uci.townName,    \
@@ -24,6 +25,7 @@ rptTllCSlist = [aep.Uci.townName,    \
                 aep.Uci.countryName, \
                 aep.Uci.stateName];
 
+# Narrow report title and columns
 hdrLlTlist = ["llT", "TT info"];
 
 rptLlTlist = [  aep.Uci.townLongLat,   \
