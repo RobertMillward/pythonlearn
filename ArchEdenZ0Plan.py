@@ -16,28 +16,26 @@ class Uci(enum.Enum):
     townLongLat = 4;
     uciEOL = 99;
 
-# A service can use this thesarus to see which fields go where by name
-# For example:
+# Thesarus
+# A service can use this thesarus to locate a field:
+# For example by name:
 # - a csv file with column headers
 # - test data with column headers possiby separate
 # - a sql result
 # - an HTML result
-# A service can use this thesarus to see which fields go to whicj uci
-class thesarus():
-    # allows for up to six fields
-    thesViaInCol = [0,0,0,0,0,0]; # varies by file being imported
-    thesViaUci = [0,0,0,0,0,0];
-    
+# For example by uci
+# - wanting data for a report
+# -
+#
+class thesField():
     def __init__(self, uci, names, value=''):
         self.uci = uci;
         self.names = names;
-        self.value = "";
-        return;
-
-    def initThesarus(myThes):
-        for tr in myThes: print("thesarusRow uci=", tr.uci);
+        self.ievalue = "";
         return;
     
-    def initForCsvField(thesarus, csvColName, csvColNbr):
-        return;
+
+    
+
+
 #END
