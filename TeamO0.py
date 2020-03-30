@@ -54,13 +54,13 @@ def rptRptHdr(teamEnum):
 def reportField(fldNbr):
     "Print one TeamData field"
     if(fldNbr == aep.Uci.townName):
-        print('%12s' %(tZ0.teamThesarusData[1]), end='');
+        print('%12s' %(tZ0.teamThesarus.thrsFields[2].ievalue), end='');
     elif(fldNbr == aep.Uci.stateName):
-        print("%8s" %(tZ0.teamThesarusData[2]), end='');
+        print("%-8s" %(tZ0.teamThesarus.thrsFields[3].ievalue), end='');
     elif(fldNbr == aep.Uci.countryName):
-        print("%6s" %(tZ0.teamThesarusData[3]), end='');
+        print("%-6s" %(tZ0.teamThesarus.thrsFields[4].ievalue), end='');
     elif(fldNbr == aep.Uci.townLongLat):
-        print("%12s" %(tZ0.teamThesarusData[4]), end='');
+        print("%-12s" %(tZ0.teamThesarus.thrsFields[1].ievalue), end='');
     elif(fldNbr == aep.Uci.uciEOL):
         print(end='\n');
     return;

@@ -20,10 +20,6 @@ demoDataSelected = [
     ["0500000", "England",  "UK"   ]]
     
 
-whrRowIx = 0;
-whrColIx = 0;
-selRowIx = 0;
-selColIx = 0;
 
 def startImport():
     whrRowIx = 0;
@@ -37,24 +33,32 @@ def startImport():
         selColIx = selColIx + 1;
         tZ0.teamThesarus.initForCsvHeader(selColNm, selColIx);
     
-    tZ0.teamThesarus.explain();
+    #tZ0.teamThesarus.explain();
     return;
 
 # demonstrate that any report can be run from the team thesarus.
 # (imagine that this is Team data)
 def doReport(rptCols):
     startImport();
+    
     tO0.rptRptHdr(rptCols);
+
+    selRowIx = -1;
     for dataRow in demoDataSelected:
+        #print("Working on row ", dataRow);
         selRowIx = selRowIx + 1;
-        selColIx = -1;
-        for selColVal in demoDataSelected[selRowIx]:
-            selColIx = selColIx + 1;
-            tZ0.teamThesarus.importCsvValue(selColVal, selColIx);
+        if(selRowIx > 0): # skip header
+            selColIx = -1;
+            for selColVal in dataRow:
+                #print("Working on column ", selColVal);
+                selColIx = selColIx + 1;
+                #print(selRowIx, selColIx, selColVal);
+                tZ0.teamThesarus.importCsvValue(selColVal, selColIx);
+                
             tO0.rptLine(rptCols);
     
-        tO0.rptFooterAll();
-        return
+    tO0.rptFooterAll();
+    return
 
 # Start program execution here
 print("Start demo of Team thesarus data.");

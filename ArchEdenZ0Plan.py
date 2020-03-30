@@ -27,7 +27,7 @@ class Uci(enum.Enum):
 # - wanting data for a report
 # -
 #
-class thesField():
+class thrsField():
     def __init__(self, uci, names, value=''):
         self.uci = uci;
         self.names = names;
