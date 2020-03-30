@@ -21,25 +21,29 @@ demoDataSelected = [
     
 
 
-def startImport():
-    whrRowIx = 0;
-    whrColIx = 0;
-    tZ0.teamThesarus.initForCsvHeader(demoDataWhereTown[whrRowIx][whrRowIx], whrColIx);
-    whrRowIx = whrRowIx + 1;
-    tZ0.teamThesarus.importCsvValue(demoDataWhereTown[whrRowIx][whrRowIx], whrColIx);
+def startDemoImportA3():
+    "Set up the columns and load the where clause data."
     selRowIx = 0;
     selColIx = -1;
     for selColNm in demoDataSelected[selRowIx]:
         selColIx = selColIx + 1;
         tZ0.teamThesarus.initForCsvHeader(selColNm, selColIx);
+        
+    whrRowIx = 0;
+    whrColIx = 0;
+    selColIx = selColIx + 1;
+    tZ0.teamThesarus.initForCsvHeader(demoDataWhereTown[whrRowIx][whrColIx], selColIx);
+    whrRowIx = whrRowIx + 1;
+    tZ0.teamThesarus.importCsvValue(demoDataWhereTown[whrRowIx][whrColIx], selColIx);
+
     
     #tZ0.teamThesarus.explain();
     return;
 
 # demonstrate that any report can be run from the team thesarus.
 # (imagine that this is Team data)
-def doReport(rptCols):
-    startImport();
+def doDemoReportA3(rptCols):
+    startDemoImportA3();
     
     tO0.rptRptHdr(rptCols);
 
@@ -48,15 +52,8 @@ def doReport(rptCols):
         #print("Working on row ", dataRow);
         selRowIx = selRowIx + 1;
         if(selRowIx > 0): # skip header
-            selColIx = -1;
-            for selColVal in dataRow:
-                #print("Working on column ", selColVal);
-                selColIx = selColIx + 1;
-                #print(selRowIx, selColIx, selColVal);
-                tZ0.teamThesarus.importCsvValue(selColVal, selColIx);
-                
-            tO0.rptLine(rptCols);
-    
+            tO0.doOneLine(dataRow, rptCols);
+            
     tO0.rptFooterAll();
     return
 
@@ -65,10 +62,12 @@ print("Start demo of Team thesarus data.");
 
 tZ0.teamThesarus.initAtStart();
 
-# this is a report of longitude/latitude and town.
-doReport(tO0.TeamRpts.longLatTown);
+# this is a report of longitude/latitude and town
+# using demo data in a list.
+doDemoReportA3(tO0.TeamRpts.longLatTown);
 
-# this is a report of town, longitude/latitude, country, and state.
-doReport(tO0.TeamRpts.townLongLatCntryState);
+# this is a report of town, longitude/latitude, country, and state
+# using the same demo data.
+doDemoReportA3(tO0.TeamRpts.townLongLatCntryState);
 
 print("End");

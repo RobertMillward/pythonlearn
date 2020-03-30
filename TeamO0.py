@@ -51,35 +51,48 @@ def rptRptHdr(teamEnum):
 
 # 100% flexible report generator in two parts
 # part 1 - output one formatted field
-def reportField(fldNbr):
-    "Print one TeamData field"
-    if(fldNbr == aep.Uci.townName):
+def reportField(uci):
+    "Print one teamThesarus Data field"
+    if(uci == aep.Uci.townName):
         print('%12s' %(tZ0.teamThesarus.thrsFields[2].ievalue), end='');
-    elif(fldNbr == aep.Uci.stateName):
+    elif(uci == aep.Uci.stateName):
         print("%-8s" %(tZ0.teamThesarus.thrsFields[3].ievalue), end='');
-    elif(fldNbr == aep.Uci.countryName):
+    elif(uci == aep.Uci.countryName):
         print("%-6s" %(tZ0.teamThesarus.thrsFields[4].ievalue), end='');
-    elif(fldNbr == aep.Uci.townLongLat):
+    elif(uci == aep.Uci.townLongLat):
         print("%-12s" %(tZ0.teamThesarus.thrsFields[1].ievalue), end='');
-    elif(fldNbr == aep.Uci.uciEOL):
+    elif(uci == aep.Uci.uciEOL):
         print(end='\n');
     return;
 
 # part 2 - output all of the desired fields for a desired row
 # including appending a uciEOL.
-def reportFields(fldLst):
-    "Print TeamData fields in the given order"
-    for x in fldLst: reportField(x);
+def reportFields(uciLst):
+    "Print all identified TeamData fields in the given order"
+    for uci in uciLst: reportField(uci);
+    # Put the new-line.
     reportField(aep.Uci.uciEOL);
     return;
 
 
 def rptLine(teamEnum):
+    "Based on the report enum given print a row."
     if(teamEnum == TeamRpts.townLongLatCntryState):
         reportFields(tZ0.rptTllCSlist);
     elif(teamEnum == TeamRpts.longLatTown):
         reportFields(tZ0.rptLlTlist);
     return
+
+
+def doOneLine(dataRow, rptCols):
+    "Import into the thesarus this data row then report it."
+    selColIx = -1;
+    for selColVal in dataRow:
+        #print("Working on column ", selColVal);
+        selColIx = selColIx + 1;
+        #print(selRowIx, selColIx, selColVal);
+        tZ0.teamThesarus.importCsvValue(selColVal, selColIx);
+    rptLine(rptCols);
 
 def rptFooterAll():
     print("End of report");

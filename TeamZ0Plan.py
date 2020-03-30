@@ -1,7 +1,6 @@
 """
 TeamZ0Plan.py Team data definition:
 """
-
 import ArchEdenZ0Plan as aep
 
 category = "TEAM";
@@ -20,6 +19,7 @@ class teamThesarus():
         aep.thrsField(aep.Uci.countryName,   ["country", "nation"])]
     
     def explain():
+        "Explain the thesarus in its current state."
         print("Begin explanation:");
         trIx = -1;
         for tr in teamThesarus.thrsFields:
@@ -42,6 +42,7 @@ class teamThesarus():
 
     
     def initAtStart():
+        "Initialize the thesarus."
         trIx = -1;
         for tr in teamThesarus.thrsFields:
             trIx = trIx + 1;
@@ -49,6 +50,7 @@ class teamThesarus():
         return;
     
     def initForCsvHeader(csvColName, csvColNbr):
+        "Initialize one column Ix by locating its matching synonym."
         trIx = -1;
         for tr in teamThesarus.thrsFields:
             trIx = trIx + 1;
@@ -59,6 +61,7 @@ class teamThesarus():
         return;
 
     def importCsvValue(csvColVal, csvColNbr):
+        "Import one column value to its designated thesarus field."
         thrsNbr = teamThesarus.thrsViaInCol[csvColNbr];
         teamThesarus.thrsFields[thrsNbr].ievalue = csvColVal;
         #print("inIt1", csvColNbr, csvColVal, thrsNbr);
@@ -66,6 +69,7 @@ class teamThesarus():
         return
 
 
+        
 # Data is loaded here from any source (until we get the above working)
 #teamThesarusData = ["someKey", "Preston", "Idaho", "USA", "7522000000"];
 
