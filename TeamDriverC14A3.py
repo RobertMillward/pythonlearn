@@ -6,12 +6,13 @@ Load data from any source into the thesarus then use these services:
 
 """
 import ArchEdenZ0Plan   as aep # the Application definitions
+import ArchTrexZ0Plan   as trex # the look and feel and data management definition
 import TeamZ0Plan       as tZ0 # the Team Data Plan
 import TeamO0           as tO0 # the Team version 'O', level '0' api
 
 # As though a query had been run for all towns named Preston
-demoDataWhereTown = ["town",
-                     "Preston"];
+demoDataWhereTown = [["town"],
+                     ["Preston"]];
 demoDataSelected = [
     ["longLat", "province", "nation"],
     ["7500000", "Idaho",    "USA"   ],
@@ -54,13 +55,15 @@ def doDemoReportA3(rptCols):
         if(selRowIx > 0): # skip header
             tO0.doOneLine(dataRow, rptCols);
             
-    tO0.rptFooterAll();
+    trex.rptFooterAll();
     return
 
 # Start program execution here
 print("Start demo of Team thesarus data.");
 
 tZ0.teamThesarus.initAtStart();
+
+tZ0.teamTrex.initAtStart();
 
 # this is a report of longitude/latitude and town
 # using demo data in a list.
@@ -70,4 +73,4 @@ doDemoReportA3(tO0.TeamRpts.longLatTown);
 # using the same demo data.
 doDemoReportA3(tO0.TeamRpts.townLongLatCntryState);
 
-print("End");
+print("End Demo");

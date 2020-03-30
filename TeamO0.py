@@ -3,39 +3,31 @@ TeamO0.py Team version "O" level "0" api definition:
 
 """
 import ArchEdenZ0Plan   as aep
+import ArchTrexZ0Plan   as trex
 import TeamZ0Plan       as tZ0
-import datetime
 import enum
 
 class TeamRpts(enum.Enum):
     townLongLatCntryState = 1;
     longLatTown = 2;
     
-def rptOpenDate():
-    gotIt = datetime.datetime.today();
-    print("%02d" %gotIt.day, end='');
-    print("/%02d" %gotIt.month, end='');
-    print("/%04d" %gotIt.year, end='');
-    print(" %02d" %gotIt.hour, end='');
-    print(":%02d" %gotIt.minute, end='');
-    print(end='\n');
-    return;
+
 
 def rptHdrTownLongLatCntryState():
-    print("[%s/"             %tZ0.category, end='');
+    print("[%s/"             %tZ0.teamTrex.thrsCtrl.category, end='');
     print("%s]"              %tZ0.hdrTllCSlist[0], end='');
-    print("     %s     "    %tZ0.hdrTllCSlist[1], end='');
-    rptOpenDate();
+    print("     %s     "     %tZ0.hdrTllCSlist[1], end='');
+    trex.rptOpenDate();
     return;
 
 def rptHdrLongLatTown():
-    print("[%s/"         %tZ0.category, end='');
+    print("[%s/"        %tZ0.teamTrex.thrsCtrl.category, end='');
     print("%s]"         %tZ0.hdrLlTlist[0], end='');
     print("   %s   "    %tZ0.hdrLlTlist[1], end='');
-    rptOpenDate();
+    trex.rptOpenDate();
     return;
 
-def rptColHdr(teamEnum):
+def rptColHdr():
     print("Column headers are coming");
     return;
 
@@ -44,7 +36,7 @@ def rptRptHdr(teamEnum):
         rptHdrTownLongLatCntryState();
     elif(teamEnum == TeamRpts.longLatTown):
         rptHdrLongLatTown();
-    rptColHdr(teamEnum)
+    rptColHdr()
     return;
 
 
@@ -54,7 +46,7 @@ def rptRptHdr(teamEnum):
 def reportField(uci):
     "Print one teamThesarus Data field"
     if(uci == aep.Uci.townName):
-        print('%12s' %(tZ0.teamThesarus.thrsFields[2].ievalue), end='');
+        print('%-12s' %(tZ0.teamThesarus.thrsFields[2].ievalue), end='');
     elif(uci == aep.Uci.stateName):
         print("%-8s" %(tZ0.teamThesarus.thrsFields[3].ievalue), end='');
     elif(uci == aep.Uci.countryName):
@@ -93,10 +85,6 @@ def doOneLine(dataRow, rptCols):
         #print(selRowIx, selColIx, selColVal);
         tZ0.teamThesarus.importCsvValue(selColVal, selColIx);
     rptLine(rptCols);
-
-def rptFooterAll():
-    print("End of report");
-    return;
 
 
 #END

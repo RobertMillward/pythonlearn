@@ -2,8 +2,44 @@
 TeamZ0Plan.py Team data definition:
 """
 import ArchEdenZ0Plan as aep
+import ArchTrexZ0Plan as trex
+import enum
 
-category = "TEAM";
+class teamTrex(trex.trexThesarus):
+    
+    thrsViaInCol = [-1,-1,-1,-1,-1]; # varies by file being imported
+    thrsViaUci = [-1,-1,-1,-1,-1];
+
+    thrsCtrl = trex.thrsCtrl("TEAM", aep.Uci.metroRowId, thrsViaInCol, thrsViaUci);
+    
+    thrsFields = [
+        trex.thrsField(aep.Uci.metroRowId,  ["rowId"]   ),
+        trex.thrsField(aep.Uci.townLongLat, ["longLat"] ),
+        trex.thrsField(aep.Uci.townName,    ["town", "city"]),
+        trex.thrsField(aep.Uci.stateName,   ["state", "province"]),
+        trex.thrsField(aep.Uci.countryName, ["country", "nation"])]
+
+    def initAtStart():
+        "Initialize this thesarus using tools in the master."
+        trex.trexThesarus.initYourAtStart(teamTrex.thrsFields, teamTrex.thrsCtrl);
+        #trex.trexThesarus.initYourAtStart(teamTrex.thrsFields, teamTrex.thrsViaUci)'
+        return;
+
+    def initForCvsHeader(csvColName, csvColNbr):
+        "Initialize one column Ix by locating its matching synonym."
+        initYourForCvsHeader(csvColName, csvColNbr, teamTrex.thrsFields,teamTrex.thrsViaInCol); 
+        return;
+
+    def importCsvValue(csvColVal, csvColNbr):
+        "Import one column value to its designated thesarus field."
+        importYourForCvsValue(csvColValue, csvColNbr, teamTrex.thrsFields, teamTrex.thrsViaInCol); 
+        return;
+
+    def explain(csvColVal, csvColNbr):
+        "Explain the thesarus in its current state."
+        explainYour(teamTrex.thrsFields, teamTrex.thrsViaInCol, teamTrex.thrsViaUci); 
+        return;
+        
 
 
 class teamThesarus():
@@ -12,11 +48,11 @@ class teamThesarus():
     thrsViaUci = [-1,-1,-1,-1,-1];
     
     thrsFields = [
-        aep.thrsField(aep.Uci.rowId,         ["rowId"]   ),
-        aep.thrsField(aep.Uci.townLongLat,   ["longLat"] ),
-        aep.thrsField(aep.Uci.townName,      ["town", "city"]),
-        aep.thrsField(aep.Uci.stateName,     ["state", "province"]),
-        aep.thrsField(aep.Uci.countryName,   ["country", "nation"])]
+        trex.thrsField(aep.Uci.metroRowId,  ["rowId"]   ),
+        trex.thrsField(aep.Uci.townLongLat, ["longLat"] ),
+        trex.thrsField(aep.Uci.townName,    ["town", "city"]),
+        trex.thrsField(aep.Uci.stateName,   ["state", "province"]),
+        trex.thrsField(aep.Uci.countryName, ["country", "nation"])]
     
     def explain():
         "Explain the thesarus in its current state."
@@ -46,7 +82,7 @@ class teamThesarus():
         trIx = -1;
         for tr in teamThesarus.thrsFields:
             trIx = trIx + 1;
-            teamThesarus.thrsViaUci[tr.uci.value - aep.Uci.rowId.value] = trIx;
+            teamThesarus.thrsViaUci[tr.uci.value - aep.Uci.metroRowId.value] = trIx;
         return;
     
     def initForCsvHeader(csvColName, csvColNbr):
@@ -56,6 +92,7 @@ class teamThesarus():
             trIx = trIx + 1;
             for tfn in tr.names:
                 if(tfn == csvColName):
+                    #print("csvColName", csvColName, trIx, csvColNbr);
                     teamThesarus.thrsViaInCol[csvColNbr] = trIx;
                     break;        
         return;
@@ -64,14 +101,12 @@ class teamThesarus():
         "Import one column value to its designated thesarus field."
         thrsNbr = teamThesarus.thrsViaInCol[csvColNbr];
         teamThesarus.thrsFields[thrsNbr].ievalue = csvColVal;
-        #print("inIt1", csvColNbr, csvColVal, thrsNbr);
-        #print("inIt2", teamThesarus.thrsFields[thrsNbr].ievalue);
+        #print("import1", csvColNbr, csvColVal, thrsNbr);
+        #print("import2", teamThesarus.thrsFields[thrsNbr].ievalue);
         return
 
 
-        
-# Data is loaded here from any source (until we get the above working)
-#teamThesarusData = ["someKey", "Preston", "Idaho", "USA", "7522000000"];
+
 
 # Full width report title and columns
 hdrTllCSlist = ["TllCS", "Full Team information"]; 
