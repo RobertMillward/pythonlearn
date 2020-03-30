@@ -22,38 +22,40 @@ demoDataSelected = [
     
 
 
-def startDemoImportA3():
+def startDemoJoinInitA3():
     "Set up the columns and load the where clause data."
     selRowIx = 0;
     selColIx = -1;
     for selColNm in demoDataSelected[selRowIx]:
         selColIx = selColIx + 1;
-        tZ0.teamThesarus.initForCsvHeader(selColNm, selColIx);
+        tZ0.teamTrex.initForCsvHeader(selColNm, selColIx);
         
     whrRowIx = 0;
     whrColIx = 0;
     selColIx = selColIx + 1;
-    tZ0.teamThesarus.initForCsvHeader(demoDataWhereTown[whrRowIx][whrColIx], selColIx);
+    tZ0.teamTrex.initForCsvHeader(demoDataWhereTown[whrRowIx][whrColIx], selColIx);
     whrRowIx = whrRowIx + 1;
-    tZ0.teamThesarus.importCsvValue(demoDataWhereTown[whrRowIx][whrColIx], selColIx);
+    tZ0.teamTrex.importCsvValue(demoDataWhereTown[whrRowIx][whrColIx], selColIx);
 
     
-    #tZ0.teamThesarus.explain();
+    #tZ0.teamTrex.explain();
     return;
 
 # demonstrate that any report can be run from the team thesarus.
 # (imagine that this is Team data)
-def doDemoReportA3(rptCols):
-    startDemoImportA3();
+def doDemoReportA3(rptColsEnum):
+    "Run the desired repoer per rptCols."
     
-    tO0.rptRptHdr(rptCols);
+    startDemoJoinInitA3();
+    
+    tO0.rptRptHdr(rptColsEnum);
 
     selRowIx = -1;
     for dataRow in demoDataSelected:
         #print("Working on row ", dataRow);
         selRowIx = selRowIx + 1;
         if(selRowIx > 0): # skip header
-            tO0.doOneLine(dataRow, rptCols);
+            tO0.doOneLine(dataRow, rptColsEnum);
             
     trex.rptFooterAll();
     return
@@ -61,16 +63,14 @@ def doDemoReportA3(rptCols):
 # Start program execution here
 print("Start demo of Team thesarus data.");
 
-tZ0.teamThesarus.initAtStart();
-
 tZ0.teamTrex.initAtStart();
 
 # this is a report of longitude/latitude and town
 # using demo data in a list.
-doDemoReportA3(tO0.TeamRpts.longLatTown);
+doDemoReportA3(tO0.TeamRptsEnum.longLatTown);
 
 # this is a report of town, longitude/latitude, country, and state
 # using the same demo data.
-doDemoReportA3(tO0.TeamRpts.townLongLatCntryState);
+doDemoReportA3(tO0.TeamRptsEnum.townLongLatCntryState);
 
 print("End Demo");

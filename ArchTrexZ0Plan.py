@@ -1,10 +1,8 @@
 """
-ArchTrexZ0Plan.py - Coming
-"""
-import ArchEdenZ0Plan as aep
-import datetime
-import enum
+ArchTrexZ0Plan.py - Services for importing, exporting, and formatting data.
 
+
+"""
 # Thesarus
 # A service can use this thesarus to locate a field:
 # For example by name:
@@ -16,16 +14,25 @@ import enum
 # - wanting data for a report
 # -
 #
-class thrsField():
+
+
+
+import ArchEdenZ0Plan as aep
+import datetime
+import enum
+
+
+class trexxField():
     def __init__(self, uci, names, value=''):
         self.uci = uci;
         self.names = names;
         self.ievalue = "";
         return;
 
-class thrsCtrl():
-    def __init__(self, category, baseUci, viaInCol, viaUci):
+class trexxCtrl():
+    def __init__(self, category, fields, baseUci, viaInCol, viaUci):
         self.category       = category;
+        self.refFields      = fields;
         self.baseUci        = baseUci;
         self.refViaInCol    = viaInCol;
         self.refViaUci      = viaUci;
@@ -33,62 +40,68 @@ class thrsCtrl():
     
     
 class trexThesarus():
-    # one reverse index each per field
+    # These variables must be overridden in any instance.
+    # one reverse index of each kind per field
     thrsViaInCol = [-1,-1]; # varies by file being imported
     thrsViaUci = [-1,-1];
 
-    thrsCtrl = thrsCtrl("TREX", aep.Uci.metroRowId, thrsViaInCol, thrsViaUci);
     # the data fields
     thrsFields = [
-        thrsField(aep.Uci.metroRowId,  ["rowId"]   ),
-        thrsField(aep.Uci.countryName, ["country", "nation"])]
+        trexxField(aep.Uci.metroRowId,  ["rowId"]   ),
+        trexxField(aep.Uci.countryName, ["country", "nation"])]
 
-    def initYourAtStart(yourFields, yourCtrl):
+    thrsCtrl = trexxCtrl("TREX", thrsFields, aep.Uci.metroRowId, thrsViaInCol, thrsViaUci);
+
+# The *Your* services serve any instance.
+# They do not need to be overridden.
+    def initYourAtStart(yourCtrl):
         "Initialize your thesarus."
+        #print("InitializingZ Your", yourCtrl.refFields[2].uci);
         yourViaUci = yourCtrl.refViaUci;
+        yourFields = yourCtrl.refFields;
+        
         trIx = -1;
         for tr in yourFields:
             trIx = trIx + 1;
             yourViaUci[tr.uci.value - yourCtrl.baseUci.value] = trIx;
         return;
-        
-    def initAtStart():
-        "Initialize the thesarus."
-        initYourAtStart(trexThesarus.thrsFields, trexThesarus.thrsCtrl);
-        return;
 
-    def initYourForCvsHeader(csvColName, csvColNbr, yourFields, yourViaInCol):
+    def initYourForCvsHeader(csvColName, csvColNbr, yourCtrl):
         "Initialize your one column Ix by locating its matching synonym."
+        #print("InitializingZ YourCvs", yourCtrl.refFields[2].uci);
+        #print("InitializingZ YourCvs", yourCtrl.refViaUci[2]);
+        #print("InitializingZ YourCvs", yourCtrl.refViaInCol[2]);
+        yourViaInCol = yourCtrl.refViaInCol;
+        yourFields = yourCtrl.refFields;
+        
         trIx = -1;
         for tr in yourFields:
             trIx = trIx + 1;
             for tfn in tr.names:
+                #print(tfn);
                 if(tfn == csvColName):
-                    #print("csvColName", csvColName, trIx, csvColNbr);
+                    #print("YourCsvHeader", csvColName, csvColNbr, trIx);
                     yourViaInCol[csvColNbr] = trIx;
                     break;         
         return; 
 
-    def initForCsvHeader(csvColName, csvColNbr):
-        "Initialize one column Ix by locating its matching synonym."
-        initYourForCvsHeader(csvColName, csvColNbr, trexThesarus.thrsFields,trexThesarus.thrsViaInCol); 
-        return;
-
-    def importYourCvsValue(csvColVal, csvColNbr, yourFields, yourViaInCol):
+    def importYourCvsValue(csvColVal, csvColNbr, yourCtrl):
         "Import your column value to its designated thesarus field."
-        thrsNbr = yourViaInCol[csvColNbr];
-        yourFields[thrsNbr].ievalue = csvColVal;
-        #print("import1", csvColNbr, csvColVal, thrsNbr);
-        #print("import2", trexThesarus.thrsFields[thrsNbr].ievalue);
-        return;
-    
-    def importCsvValue(csvColVal, csvColNbr):
-        "Import one column value to its designated thesarus field."
-        importYourForCvsValue(csvColValue, csvColNbr, trexThesarus.thrsFields, trexThesarus.thrsViaInCol); 
+        yourViaInCol = yourCtrl.refViaInCol;
+        yourFields = yourCtrl.refFields;
+        
+        thryNbr = yourViaInCol[csvColNbr];
+        yourFields[thryNbr].ievalue = csvColVal;
+        #print("import1", csvColNbr, csvColVal, thryNbr);
+        #print("import2", yourFields[thryNbr].ievalue);
         return;
 
-    def explainYour(yourFields, yourViaInCol, yourViaUci):
+    def explainYour(yourCtrl):
         "Explain your thesarus in its current state."
+        yourViaUci = yourCtrl.refViaUci;
+        yourViaInCol = yourCtrl.refViaInCol;
+        yourFields = yourCtrl.refFields;
+        
         print("Begin explanation:");
         trIx = -1;
         for tr in yourFields:
@@ -108,10 +121,27 @@ class trexThesarus():
             print("Reverse csv[", trIx, "]=", csvIx);
         print("End of explanation");
         return;
+
+# These services are for this instance and must be
+# overridden in other instances.
+    def initAtStart():
+        "Initialize the thesarus."
+        initYourAtStart(trexThesarus.thrsCtrl);
+        return;
+
+    def initForCsvHeader(csvColName, csvColNbr):
+        "Initialize one column Ix by locating its matching synonym."
+        trexThesarus.initYourForCvsHeader(csvColName, csvColNbr, trexThesarus.thrsCtrl); 
+        return;
     
-    def explain(csvColVal, csvColNbr):
-        "Explain the thesarus in its current state."
-        explainYour(trexThesarus.thrsFields,trexThesarus.thrsViaInCol, trexThesarus.thrsViaUci); 
+    def importCsvValue(csvColVal, csvColNbr):
+        "Import one column value to its designated thesarus field."
+        trexThesarus.importYourForCvsValue(csvColValue, csvColNbr, trexThesarus.thrsCtrl); 
+        return;
+    
+    def explain():
+        "Explain this thesarus in its current state."
+        trexThesarus.explainYour(trexThesarus.thrsCtrl); 
         return;
 
 

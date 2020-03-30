@@ -7,7 +7,7 @@ import ArchTrexZ0Plan   as trex
 import TeamZ0Plan       as tZ0
 import enum
 
-class TeamRpts(enum.Enum):
+class TeamRptsEnum(enum.Enum):
     townLongLatCntryState = 1;
     longLatTown = 2;
     
@@ -27,16 +27,22 @@ def rptHdrLongLatTown():
     trex.rptOpenDate();
     return;
 
-def rptColHdr():
+
+def rptColHdr(uciList):
+    "Print the headers for the desired columns."
     print("Column headers are coming");
+    for uciIx in uciList:
+        print(uciIx);
     return;
 
-def rptRptHdr(teamEnum):
-    if(teamEnum == TeamRpts.townLongLatCntryState):
+def rptRptHdr(teamRptEnum):
+    if(teamRptEnum == TeamRptsEnum.townLongLatCntryState):
         rptHdrTownLongLatCntryState();
-    elif(teamEnum == TeamRpts.longLatTown):
+        rptColHdr(tZ0.rptTllCSlist);
+    elif(teamRptEnum == TeamRptsEnum.longLatTown):
         rptHdrLongLatTown();
-    rptColHdr()
+        rptColHdr(tZ0.rptLlTlist);
+        
     return;
 
 
@@ -46,13 +52,13 @@ def rptRptHdr(teamEnum):
 def reportField(uci):
     "Print one teamThesarus Data field"
     if(uci == aep.Uci.townName):
-        print('%-12s' %(tZ0.teamThesarus.thrsFields[2].ievalue), end='');
+        print('%-12s' %(tZ0.teamTrex.thrsFields[2].ievalue), end='');
     elif(uci == aep.Uci.stateName):
-        print("%-8s" %(tZ0.teamThesarus.thrsFields[3].ievalue), end='');
+        print("%-8s" %(tZ0.teamTrex.thrsFields[3].ievalue), end='');
     elif(uci == aep.Uci.countryName):
-        print("%-6s" %(tZ0.teamThesarus.thrsFields[4].ievalue), end='');
+        print("%-6s" %(tZ0.teamTrex.thrsFields[4].ievalue), end='');
     elif(uci == aep.Uci.townLongLat):
-        print("%-12s" %(tZ0.teamThesarus.thrsFields[1].ievalue), end='');
+        print("%-12s" %(tZ0.teamTrex.thrsFields[1].ievalue), end='');
     elif(uci == aep.Uci.uciEOL):
         print(end='\n');
     return;
@@ -69,9 +75,9 @@ def reportFields(uciLst):
 
 def rptLine(teamEnum):
     "Based on the report enum given print a row."
-    if(teamEnum == TeamRpts.townLongLatCntryState):
+    if(teamEnum == TeamRptsEnum.townLongLatCntryState):
         reportFields(tZ0.rptTllCSlist);
-    elif(teamEnum == TeamRpts.longLatTown):
+    elif(teamEnum == TeamRptsEnum.longLatTown):
         reportFields(tZ0.rptLlTlist);
     return
 
@@ -83,7 +89,7 @@ def doOneLine(dataRow, rptCols):
         #print("Working on column ", selColVal);
         selColIx = selColIx + 1;
         #print(selRowIx, selColIx, selColVal);
-        tZ0.teamThesarus.importCsvValue(selColVal, selColIx);
+        tZ0.teamTrex.importCsvValue(selColVal, selColIx);
     rptLine(rptCols);
 
 
