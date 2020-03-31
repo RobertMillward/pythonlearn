@@ -44,11 +44,11 @@ def startDemoJoinInitA3():
 # demonstrate that any report can be run from the team thesarus.
 # (imagine that this is Team data)
 def doDemoReportA3(rptColsEnum):
-    "Run the desired repoer per rptCols."
+    "Run the desired report per rptCols."
     
     startDemoJoinInitA3();
     
-    tO0.rptRptHdr(rptColsEnum);
+    tZ0.teamTrex.rptRptHdr(rptColsEnum);
 
     selRowIx = -1;
     for dataRow in demoDataSelected:
@@ -67,10 +67,10 @@ tZ0.teamTrex.initAtStart();
 
 # this is a report of longitude/latitude and town
 # using demo data in a list.
-doDemoReportA3(tO0.TeamRptsEnum.longLatTown);
+doDemoReportA3(tZ0.TeamRptsEnum.longLatTown);
 
 # this is a report of town, longitude/latitude, country, and state
 # using the same demo data.
-doDemoReportA3(tO0.TeamRptsEnum.townLongLatCntryState);
+doDemoReportA3(tZ0.TeamRptsEnum.townLongLatCntryState);
 
 print("End Demo");

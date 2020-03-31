@@ -1,25 +1,24 @@
 """
 ArchTrexZ0Plan.py - Services for importing, exporting, and formatting data.
+Using this thesarus a producer or consumer can locate a common field to process.
 
-
+It knows about ArchEdenZ0Plan Uci so covers much of the processing.
 """
-# Thesarus
-# A service can use this thesarus to locate a field:
-# For example by name:
-# - a csv file with column headers
-# - test data with column headers possiby separate
-# - a sql result
-# - an HTML result
-# For example by uci
-# - wanting data for a report
-# -
-#
-
-
-
 import ArchEdenZ0Plan as aep
 import datetime
-import enum
+
+
+
+def rptOpenDateRight():
+    "Print a common look and feel date at the end of the line."
+    gotIt = datetime.datetime.today();
+    print("%02d" %gotIt.day, end='');
+    print("/%02d" %gotIt.month, end='');
+    print("/%04d" %gotIt.year, end='');
+    print(" %02d" %gotIt.hour, end='');
+    print(":%02d" %gotIt.minute, end='');
+    print(end='\n');
+    return;
 
 
 class trexxField():
@@ -38,7 +37,8 @@ class trexxCtrl():
         self.refViaUci      = viaUci;
         return;
     
-    
+# The thesarus prototype
+#
 class trexThesarus():
     # These variables must be overridden in any instance.
     # one reverse index of each kind per field
@@ -96,6 +96,46 @@ class trexThesarus():
         #print("import2", yourFields[thryNbr].ievalue);
         return;
 
+
+    def yourHdrLeftSubMidRight(yourCtrl, hdrSubAndMid):
+        print("[%s/"             %yourCtrl.category, end='');
+        print("%s]"              %hdrSubAndMid[0], end='');
+        print("     %s     "     %hdrSubAndMid[1], end='');
+        rptOpenDateRight();
+        return;
+
+    def yourRptColHdr(yourCtrl, uciList):
+        "Print the headers for the desired columns."
+        print("Column headers are coming");
+        for uciIx in uciList:
+            print(uciIx);
+        return;
+
+    # 100% flexible report generator in two parts
+    # part 1 - output one formatted field
+    def reportYourField(yourCtrl, uci):
+        "Print one trex Data field"
+        if(uci == aep.Uci.townName):
+            print('%-12s' %(yourCtrl.refFields[2].ievalue), end='');
+        elif(uci == aep.Uci.stateName):
+            print("%-8s" %(yourCtrl.refFields[3].ievalue), end='');
+        elif(uci == aep.Uci.countryName):
+            print("%-6s" %(yourCtrl.refFields[4].ievalue), end='');
+        elif(uci == aep.Uci.townLongLat):
+            print("%-12s" %(yourCtrl.refFields[1].ievalue), end='');
+        elif(uci == aep.Uci.uciEOL):
+            print(end='\n');
+        return;
+
+    # part 2 - output all of the desired fields for a desired row
+    # including appending a new-line.
+    def reportYourFields(yourCtrl, uciLst):
+        "Print all your identified trex fields in the given order"
+        for uci in uciLst: trexThesarus.reportYourField(yourCtrl, uci);
+        # Put the new-line.
+        trexThesarus.reportYourField(yourCtrl, aep.Uci.uciEOL);
+        return;
+
     def explainYour(yourCtrl):
         "Explain your thesarus in its current state."
         yourViaUci = yourCtrl.refViaUci;
@@ -144,17 +184,6 @@ class trexThesarus():
         trexThesarus.explainYour(trexThesarus.thrsCtrl); 
         return;
 
-
-def rptOpenDate():
-    "Print a common look and feel date at the end of the line."
-    gotIt = datetime.datetime.today();
-    print("%02d" %gotIt.day, end='');
-    print("/%02d" %gotIt.month, end='');
-    print("/%04d" %gotIt.year, end='');
-    print(" %02d" %gotIt.hour, end='');
-    print(":%02d" %gotIt.minute, end='');
-    print(end='\n');
-    return;
 
 
 
