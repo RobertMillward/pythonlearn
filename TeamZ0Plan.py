@@ -33,11 +33,11 @@ class teamTrex(trex.trexThesarus):
 
     
     thrsFields = [
-        trex.trexxField(aep.Uci.metroRowId,  ["rowId"]   ),
-        trex.trexxField(aep.Uci.townLongLat, ["longLat"] ),
-        trex.trexxField(aep.Uci.townName,    ["town", "city"]),
-        trex.trexxField(aep.Uci.stateName,   ["state", "province"]),
-        trex.trexxField(aep.Uci.countryName, ["country", "nation"])];
+        trex.trexxField(aep.Uci.metroRowId,  "%-8s", ["rowId"]   ),
+        trex.trexxField(aep.Uci.townLongLat, "%-12s", ["longLat"] ),
+        trex.trexxField(aep.Uci.townName,    "%-12s", ["town", "city"]),
+        trex.trexxField(aep.Uci.stateName,   "%-8s", ["state", "province"]),
+        trex.trexxField(aep.Uci.countryName, "%-8s", ["country", "nation"])];
 
     
     thrsCtrl = trex.trexxCtrl("TEAM", thrsFields, aep.Uci.metroRowId, thrsViaInCol, thrsViaUci);

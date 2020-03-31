@@ -23,9 +23,10 @@ def rptOpenDateRight():
 
 
 class trexxField():
-    def __init__(self, uci, names, value=''):
+    def __init__(self, uci, hdrFmt, names, value=''):
         self.uci = uci;
         self.names = names;
+        self.hdrFmt = hdrFmt;
         self.ievalue = "";
         return;
 
@@ -52,8 +53,8 @@ class trexThesarus():
 
     # the data fields
     thrsFields = [
-        trexxField(anyEnv.Uci.metroRowId,  ["rowId"]   ),
-        trexxField(anyEnv.Uci.countryName, ["country", "nation"])]
+        trexxField(anyEnv.Uci.metroRowId,  "%-8s", ["rowId"]   ),
+        trexxField(anyEnv.Uci.countryName, "%-8s", ["country", "nation"])]
 
     thrsCtrl = trexxCtrl("TREX", thrsFields, anyEnv.Uci.metroRowId, thrsViaInCol, thrsViaUci);
 
@@ -65,17 +66,18 @@ class trexThesarus():
         yourViaUci = yourCtrl.refViaUci;
         yourFields = yourCtrl.refFields;
         
-        trIx = -1;
+        thrsIx = -1;
         for tr in yourFields:
-            trIx = trIx + 1;
-            yourViaUci[tr.uci.value - yourCtrl.baseUci.value] = trIx;
+            thrsIx = thrsIx + 1;
+            yourViaUci[tr.uci.value - yourCtrl.baseUci.value] = thrsIx;
+            #print("########", tr.uci, "=", thrsIx, "##");
         return;
 
     def initYourForCvsHeader(yourCtrl, csvColName, csvColNbr):
         "Initialize your one column Ix by locating its matching synonym."
-        #print("InitializingZ YourCvs", yourCtrl.refFields[2].uci);
-        #print("InitializingZ YourCvs", yourCtrl.refViaUci[2]);
-        #print("InitializingZ YourCvs", yourCtrl.refViaInCol[2]);
+        #print("InitializingZ YourCsv", yourCtrl.refFields[2].uci);
+        #print("InitializingZ YourCsv", yourCtrl.refViaUci[2]);
+        #print("InitializingZ YourCsv", yourCtrl.refViaInCol[2]);
         yourViaInCol = yourCtrl.refViaInCol;
         yourFields = yourCtrl.refFields;
         
@@ -119,25 +121,31 @@ class trexThesarus():
 
     def yourRptColHdr(yourCtrl, uciList):
         "Print the headers for the desired columns."
-        print("Column headers are coming");
+        #print("Column headers are coming");
         for uciIx in uciList:
-            print(uciIx);
+            thrsIx = yourCtrl.refViaUci[uciIx.value - yourCtrl.baseUci.value];
+            #print("\n####", uciIx, thrsIx, );
+            print(yourCtrl.refFields[thrsIx].hdrFmt %yourCtrl.refFields[thrsIx].names[0], end='');
+        print();    
         return;
 
     # 100% flexible report generator in two parts
     # part 1 - output one formatted field
     def reportYourField(yourCtrl, uci):
         "Print one trex Data field"
-        if(uci == anyEnv.Uci.townName):
-            print('%-12s' %(yourCtrl.refFields[2].ievalue), end='');
-        elif(uci == anyEnv.Uci.stateName):
-            print("%-8s" %(yourCtrl.refFields[3].ievalue), end='');
-        elif(uci == anyEnv.Uci.countryName):
-            print("%-6s" %(yourCtrl.refFields[4].ievalue), end='');
-        elif(uci == anyEnv.Uci.townLongLat):
-            print("%-12s" %(yourCtrl.refFields[1].ievalue), end='');
-        elif(uci == anyEnv.Uci.uciEOL):
+        #print("\n********", uci, "##", end='');
+        if(uci == anyEnv.Uci.uciEOL):
             print(end='\n');
+        else:
+            thrsIx = yourCtrl.refViaUci[uci.value - yourCtrl.baseUci.value];
+            if(uci == anyEnv.Uci.townName):
+                print('%-12s' %(yourCtrl.refFields[thrsIx].ievalue), end='');
+            elif(uci == anyEnv.Uci.stateName):
+                print("%-8s" %(yourCtrl.refFields[thrsIx].ievalue), end='');
+            elif(uci == anyEnv.Uci.countryName):
+                print("%-8s" %(yourCtrl.refFields[thrsIx].ievalue), end='');
+            elif(uci == anyEnv.Uci.townLongLat):
+                print("%-12s" %(yourCtrl.refFields[thrsIx].ievalue), end='');
         return;
 
     # part 2 - output all of the desired fields for a desired row
