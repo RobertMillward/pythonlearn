@@ -2,9 +2,10 @@
 ArchTrexZ0Plan.py - Services for importing, exporting, and formatting data.
 Using this thesarus a producer or consumer can locate a common field to process.
 
+It can, with a few appropriate changes, connect to anyEnv Uci driven.
 It knows about ArchEdenZ0Plan Uci so covers much of the processing.
 """
-import ArchEdenZ0Plan as aep
+import ArchEdenZ0Plan as anyEnv
 import datetime
 
 
@@ -28,6 +29,9 @@ class trexxField():
         self.ievalue = "";
         return;
 
+# The trexxCtrl is a single argument to the functions that do the work.
+# the baseUci is the lowest numbered Uci
+# of the field group served by the child.
 class trexxCtrl():
     def __init__(self, category, fields, baseUci, viaInCol, viaUci):
         self.category       = category;
@@ -37,20 +41,21 @@ class trexxCtrl():
         self.refViaUci      = viaUci;
         return;
     
-# The thesarus prototype
+# The thesarus prototype or parent.
+# Children of this class are useful.
 #
 class trexThesarus():
-    # These variables must be overridden in any instance.
+    # These variables must be overridden in any child.
     # one reverse index of each kind per field
     thrsViaInCol = [-1,-1]; # varies by file being imported
     thrsViaUci = [-1,-1];
 
     # the data fields
     thrsFields = [
-        trexxField(aep.Uci.metroRowId,  ["rowId"]   ),
-        trexxField(aep.Uci.countryName, ["country", "nation"])]
+        trexxField(anyEnv.Uci.metroRowId,  ["rowId"]   ),
+        trexxField(anyEnv.Uci.countryName, ["country", "nation"])]
 
-    thrsCtrl = trexxCtrl("TREX", thrsFields, aep.Uci.metroRowId, thrsViaInCol, thrsViaUci);
+    thrsCtrl = trexxCtrl("TREX", thrsFields, anyEnv.Uci.metroRowId, thrsViaInCol, thrsViaUci);
 
 # The *Your* services serve any instance.
 # They do not need to be overridden.
@@ -66,7 +71,7 @@ class trexThesarus():
             yourViaUci[tr.uci.value - yourCtrl.baseUci.value] = trIx;
         return;
 
-    def initYourForCvsHeader(csvColName, csvColNbr, yourCtrl):
+    def initYourForCvsHeader(yourCtrl, csvColName, csvColNbr):
         "Initialize your one column Ix by locating its matching synonym."
         #print("InitializingZ YourCvs", yourCtrl.refFields[2].uci);
         #print("InitializingZ YourCvs", yourCtrl.refViaUci[2]);
@@ -85,7 +90,7 @@ class trexThesarus():
                     break;         
         return; 
 
-    def importYourCvsValue(csvColVal, csvColNbr, yourCtrl):
+    def importYourCsvValue(yourCtrl, csvColVal, csvColNbr):
         "Import your column value to its designated thesarus field."
         yourViaInCol = yourCtrl.refViaInCol;
         yourFields = yourCtrl.refFields;
@@ -96,6 +101,14 @@ class trexThesarus():
         #print("import2", yourFields[thryNbr].ievalue);
         return;
 
+    def importYourLine(yourCtrl, dataRow, rptCols):
+        "Import into the thesarus this data row."
+        selColIx = -1;
+        for selColVal in dataRow:
+            #print("Working on column ", selColVal);
+            selColIx = selColIx + 1;
+            #print(selRowIx, selColIx, selColVal);
+            trexThesarus.importYourCsvValue(yourCtrl, selColVal, selColIx);
 
     def yourHdrLeftSubMidRight(yourCtrl, hdrSubAndMid):
         print("[%s/"             %yourCtrl.category, end='');
@@ -115,15 +128,15 @@ class trexThesarus():
     # part 1 - output one formatted field
     def reportYourField(yourCtrl, uci):
         "Print one trex Data field"
-        if(uci == aep.Uci.townName):
+        if(uci == anyEnv.Uci.townName):
             print('%-12s' %(yourCtrl.refFields[2].ievalue), end='');
-        elif(uci == aep.Uci.stateName):
+        elif(uci == anyEnv.Uci.stateName):
             print("%-8s" %(yourCtrl.refFields[3].ievalue), end='');
-        elif(uci == aep.Uci.countryName):
+        elif(uci == anyEnv.Uci.countryName):
             print("%-6s" %(yourCtrl.refFields[4].ievalue), end='');
-        elif(uci == aep.Uci.townLongLat):
+        elif(uci == anyEnv.Uci.townLongLat):
             print("%-12s" %(yourCtrl.refFields[1].ievalue), end='');
-        elif(uci == aep.Uci.uciEOL):
+        elif(uci == anyEnv.Uci.uciEOL):
             print(end='\n');
         return;
 
@@ -133,10 +146,11 @@ class trexThesarus():
         "Print all your identified trex fields in the given order"
         for uci in uciLst: trexThesarus.reportYourField(yourCtrl, uci);
         # Put the new-line.
-        trexThesarus.reportYourField(yourCtrl, aep.Uci.uciEOL);
+        trexThesarus.reportYourField(yourCtrl, anyEnv.Uci.uciEOL);
         return;
 
-    def explainYour(yourCtrl):
+
+    def explainYour(yourCtrl): # will revise to __str__(self):
         "Explain your thesarus in its current state."
         yourViaUci = yourCtrl.refViaUci;
         yourViaInCol = yourCtrl.refViaInCol;
@@ -178,6 +192,13 @@ class trexThesarus():
         "Import one column value to its designated thesarus field."
         trexThesarus.importYourForCvsValue(csvColValue, csvColNbr, trexThesarus.thrsCtrl); 
         return;
+    
+    def doOneLine(dataRow, rptColsEnum):
+        "Import one row then report it."
+        trexThesarus.importYourLine(thrsCtrl, dataRow, rptColsEnum);
+        trexThesarus.rptYourLine(thrsCtrl, rptColsEnum);
+        return;
+
     
     def explain():
         "Explain this thesarus in its current state."

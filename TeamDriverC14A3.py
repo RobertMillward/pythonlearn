@@ -47,17 +47,8 @@ def doDemoReportA3(rptColsEnum):
     "Run the desired report per rptCols."
     
     startDemoJoinInitA3();
-    
-    tZ0.teamTrex.rptRptHdr(rptColsEnum);
+    tZ0.teamTrex.doOneReport(demoDataSelected, rptColsEnum); 
 
-    selRowIx = -1;
-    for dataRow in demoDataSelected:
-        #print("Working on row ", dataRow);
-        selRowIx = selRowIx + 1;
-        if(selRowIx > 0): # skip header
-            tO0.doOneLine(dataRow, rptColsEnum);
-            
-    trex.rptFooterAll();
     return
 
 # Start program execution here

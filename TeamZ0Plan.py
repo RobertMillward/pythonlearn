@@ -51,12 +51,12 @@ class teamTrex(trex.trexThesarus):
         "Initialize one column Ix by locating its matching synonym."
         #print("Initializing2 teamTrex", teamTrex.thrsCtrl.refFields[2].uci);
         #print("Initializing3 teamTrex", teamTrex.thrsCtrl.refViaUci[2])
-        teamTrex.initYourForCvsHeader(csvColName, csvColNbr, teamTrex.thrsCtrl); 
+        teamTrex.initYourForCvsHeader(teamTrex.thrsCtrl, csvColName, csvColNbr); 
         return;
 
     def importCsvValue(csvColVal, csvColNbr):
         "Import one column value to its designated thesarus field."
-        teamTrex.importYourCvsValue(csvColVal, csvColNbr, teamTrex.thrsCtrl); 
+        teamTrex.importYourCsvValue(teamTrex.thrsCtrl, csvColVal, csvColNbr); 
         return;
 
     def rptRptHdr(teamRptEnum):
@@ -75,6 +75,24 @@ class teamTrex(trex.trexThesarus):
         elif(teamRptEnum == TeamRptsEnum.longLatTown):
             teamTrex.reportYourFields(teamTrex.thrsCtrl, rptLlTlist);
         return
+    
+    def doOneLine(dataRow, rptColsEnum):
+        "Import one row then report it."
+        teamTrex.importYourLine(teamTrex.thrsCtrl, dataRow, rptColsEnum);
+        teamTrex.rptLine(rptColsEnum);
+        return;
+    
+    def doOneReport(dataRows, rptColsEnum):
+        "Import and report one data set."
+        teamTrex.rptRptHdr(rptColsEnum);
+        selRowIx = -1;
+        for dataRow in dataRows:
+            #print("Working on row ", dataRow);
+            selRowIx = selRowIx + 1;
+            if(selRowIx > 0): # skip header
+                teamTrex.doOneLine(dataRow, rptColsEnum);
+        trex.rptFooterAll();
+        return;
 
     def explain():
         "Explain the thesarus in its current state."
