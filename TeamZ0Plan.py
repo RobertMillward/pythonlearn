@@ -1,5 +1,7 @@
 """
 TeamZ0Plan.py Team data definition:
+
+Copyright (c) 2020, Robert Russell Millward, all rights reserved.
 """
 import ArchEdenZ0Plan as aep
 import ArchTrexZ0Plan as trex
@@ -82,14 +84,14 @@ class teamTrex(trex.trexThesarus):
         teamTrex.rptLine(rptColsEnum);
         return;
     
-    def doOneReport(dataRows, rptColsEnum):
+    def doOneReport(dataRows, rptColsEnum, skipRowsIx):
         "Import and report one data set."
         teamTrex.rptRptHdr(rptColsEnum);
         selRowIx = -1;
         for dataRow in dataRows:
             #print("Working on row ", dataRow);
             selRowIx = selRowIx + 1;
-            if(selRowIx > 0): # skip header
+            if(selRowIx > skipRowsIx): # skip header
                 teamTrex.doOneLine(dataRow, rptColsEnum);
         trex.rptFooterAll();
         return;

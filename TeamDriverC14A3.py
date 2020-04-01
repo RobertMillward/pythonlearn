@@ -4,9 +4,10 @@ Load data from any source into the thesarus then use these services:
 - report the data using a stock or custom field list.
 - blah blah blah
 
+Copyright (c) 2020, Robert Russell Millward, all rights reserved.
+
 """
 import ArchEdenZ0Plan   as aep # the Application definitions
-import ArchTrexZ0Plan   as trex # the look and feel and data management definition
 import TeamZ0Plan       as tZ0 # the Team Data Plan
 import TeamO0           as tO0 # the Team version 'O', level '0' api
 
@@ -34,6 +35,7 @@ def startDemoJoinInitA3():
     whrColIx = 0;
     selColIx = selColIx + 1;
     tZ0.teamTrex.initForCsvHeader(demoDataWhereTown[whrRowIx][whrColIx], selColIx);
+    # The where city = 'Preston' clause data (which is not in the selected data).
     whrRowIx = whrRowIx + 1;
     tZ0.teamTrex.importCsvValue(demoDataWhereTown[whrRowIx][whrColIx], selColIx);
 
@@ -47,7 +49,7 @@ def doDemoReportA3(rptColsEnum):
     "Run the desired report per rptCols."
     
     startDemoJoinInitA3();
-    tZ0.teamTrex.doOneReport(demoDataSelected, rptColsEnum); 
+    tZ0.teamTrex.doOneReport(demoDataSelected, rptColsEnum, 0); 
 
     return
 

@@ -4,6 +4,8 @@ Using this thesarus a producer or consumer can locate a common field to process.
 
 It can, with a few appropriate changes, connect to anyEnv Uci driven.
 It knows about ArchEdenZ0Plan Uci so covers much of the processing.
+
+Copyright (c) 2020, Robert Russell Millward, all rights reserved.
 """
 import ArchEdenZ0Plan as anyEnv
 import datetime
