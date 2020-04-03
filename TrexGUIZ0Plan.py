@@ -5,7 +5,7 @@ Using this thesarus a producer or consumer can locate a common field to process.
 It can, with a few appropriate changes, connect to anyEnv Uci driven.
 It knows about ArchEdenZ0Plan Uci so covers much of the processing.
 
-*Trex is short for thesarus, right?!
+*Trex is short for Trex thesarus, right?!
 
 Copyright (c) 2020, Robert Russell Millward, all rights reserved.
 """
@@ -40,6 +40,7 @@ class trexguiField():
         self.ieCtl.pack();
         self.ieCtl["textvariable"] = self.contents;
         #self.ieCtl.bind('<Key-Return>', trexguiField.TODO);
+        #self.seeEm.bind('<Key-Return>', self.myDoPrintOnLog)
         return;
 
 # The trexxCtrl is a single argument to the functions that do the work.
@@ -57,8 +58,18 @@ class trexxCtrl():
         self.refViaInCol    = viaInCol;
         self.refViaUci      = viaUci;
         return;
+
+    #       * Master creator
+    def Merge__init__(self, master=None):
+        Frame.__init__(self, master);
+        self.pack();
+        self.myCreateButtons();
+        #for stuff in self: print(stuff);
+        #master.title = "Master title";
+        #self.title = "Self title";
+        return;
     
-# This the humble thesarus prototype or parent.
+# This is the humble thesarus prototype or parent.
 # Children of this class are useful.
 #
 class TrexGUIThesarus():
@@ -66,20 +77,21 @@ class TrexGUIThesarus():
     # These variables must be overridden in any child.
     # one reverse index of each kind per field
     thrsViaInCol = [-1,-1]; # varies by file being imported
-    thrsViaUci = [-1,-1,-1];
+    thrsViaUci = [-1,-1];
 
     # the data fields
     thrsFields = [
-        trexguiField(anyEnv.Uci.metroRowId, "%-8s", ["rowId"]   ),
-        trexguiField(anyEnv.Uci.countryName, "%-8s", ["country", "nation"])];
+        #trexguiField(anyEnv.Uci.metroRowId, "%-8s", ["rowId"]   ),
+        #trexguiField(anyEnv.Uci.countryName, "%-8s", ["country", "nation"])
+        ];
 
     thrsCtrl = trexxCtrl("TREX", thrsFields, anyEnv.Uci.metroRowId, thrsViaInCol, thrsViaUci);
 
-    #       Doers
-    #       - sayHi
-    #       - loadIt
-    #       - printOnLog
-    #
+#       Doers
+#       - sayHi
+#       - loadIt
+#       - printOnLog
+#
     def myDoSayHi(self):
         print("hi Bob");
         return;
@@ -87,11 +99,52 @@ class TrexGUIThesarus():
     def myDoLoadIt(self):
         print("Loaded");
         return;
-            
+        
     def myDoPrintOnLog(self, event):
         print("Log->", self.contents.get());
         #self.contents.set("So there");
         return;
+
+#       Creators
+#       - Buttons
+#       - Texts
+#
+# * Buttons (Create)
+# ** quit
+# ** hi
+# ** load
+    def myCreateQuit(self):
+        self.QUIT = Button(self);
+        self.QUIT["text"] = "Quit";
+        self.QUIT["fg"] = "red";
+        self.QUIT["command"] = self.quit; # probably class
+        self.QUIT.pack({"side": "left"});
+        return;
+
+    def myCreateSayHi(self):
+        self.hiThere = Button(self);
+        self.hiThere["text"] = "Hello",
+        self.hiThere["command"] = self.myDoSayHi;
+        self.hiThere.pack({"side": "left"});
+        return;
+
+    def myCreateLoadData(self):
+        self.loadData = Button(self);
+        self.loadData["text"] = "Load",
+        self.loadData["fg"] = "green";
+        self.loadData["command"] = self.myDoLoadIt;
+        self.loadData.pack({"side": "left"});
+        return;
+
+#       * Menues
+#       ** Buttons]
+    def myCreateButtons(self):
+        self.myCreateSayHi();
+        self.myCreateLoadData();
+        self.myCreateQuit();
+        return;
+
+    
 
 
 # The *Your* services serve any instance.

@@ -55,8 +55,9 @@ class trexThesarus():
 
     # the data fields
     thrsFields = [
-        trexxField(anyEnv.Uci.metroRowId,  "%-8s", ["rowId"]   ),
-        trexxField(anyEnv.Uci.countryName, "%-8s", ["country", "nation"])]
+        #trexxField(anyEnv.Uci.metroRowId,  "%-8s", ["rowId"]   ),
+        #trexxField(anyEnv.Uci.countryName, "%-8s", ["country", "nation"])
+        ];
 
     thrsCtrl = trexxCtrl("TREX", thrsFields, anyEnv.Uci.metroRowId, thrsViaInCol, thrsViaUci);
 
